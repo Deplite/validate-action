@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  self-test:
+    name: self-test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: 저장소 체크아웃
+        uses: actions/checkout@v5
+      - name: 유효한 워크플로우 검사
+        uses: ./
+        with:
+          path: testdata/valid
+      - name: 잘못된 워크플로우 검사
+        id: invalid
+        continue-on-error: true
+        uses: ./
+        with:
+          path: testdata/invalid
+      - name: 잘못된 워크플로우가 실패했는지 확인
+        if: steps.invalid.outcome != 'failure'
+        shell: bash
+        run: |
+          echo "::error::잘못된 워크플로우가 성공으로 처리됐습니다."
+          exit 1

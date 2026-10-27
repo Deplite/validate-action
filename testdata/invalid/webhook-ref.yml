@@ -1,0 +1,7 @@
+name: limited-deploy
+on:
+  webhook:
+    ref: [main]
+steps:
+  - name: deploy
+    run: echo deploy

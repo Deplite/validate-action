@@ -1,0 +1,30 @@
+name: Deplite Validate
+author: Deplite
+description: Validate Deplite workflow YAML files in pull requests.
+branding:
+  icon: check-circle
+  color: purple
+inputs:
+  path:
+    description: Path to the directory containing workflow YAML files.
+    required: false
+  files:
+    description: Whitespace- or newline-separated workflow file paths.
+    required: false
+  agent-version:
+    description: Deplite Agent version to use.
+    required: false
+    default: v0.1.0
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        VALIDATE_PATH: ${{ inputs.path }}
+        VALIDATE_FILES: ${{ inputs.files }}
+        VALIDATE_AGENT_VERSION: ${{ inputs.agent-version }}
+      run: |
+        bash "$GITHUB_ACTION_PATH/validate.sh" \
+          --path "$VALIDATE_PATH" \
+          --files "$VALIDATE_FILES" \
+          --agent-version "$VALIDATE_AGENT_VERSION"

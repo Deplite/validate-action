@@ -1,0 +1,13 @@
+{
+  "owner": "deplite-validate",
+  "pattern": [
+    {
+      "regexp": "^FAIL  (.+)$",
+      "file": 1
+    },
+    {
+      "regexp": "^      (.+)$",
+      "message": 1
+    }
+  ]
+}
